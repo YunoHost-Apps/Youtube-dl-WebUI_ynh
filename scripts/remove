@@ -1,0 +1,23 @@
+#!/bin/bash
+# p1rox's Youtube-dl-WebUI remove script for YunoHost
+
+app=youtube-dl-webui
+
+# Retrieve arguments
+domain=$(sudo yunohost app setting $app domain)
+path=$(sudo yunohost app setting $app path)
+download_folder=$(sudo yunohost app setting $app download_folder)
+is_public=$(sudo yunohost app setting $app is_public)
+
+# Remove sources
+sudo rm -rf /var/www/$app
+
+# Remove configuration files
+sudo rm -f /etc/nginx/conf.d/$domain.d/$app.conf
+
+# Because the download folder may still be usefull
+echo "Please delete the download folder '$download_folder' yourself if needed"
+
+# Restart services
+sudo /etc/init.d/nginx reload
+sudo yunohost app ssowatconf

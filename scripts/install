@@ -1,0 +1,55 @@
+#!/bin/bash
+# p1rox's Youtube-dl-WebUI installation script for YunoHost
+
+app=youtube-dl-webui
+domain=$1
+path=$2
+
+# Check domain/path availability asap
+check=`sudo yunohost app checkurl $domain$path -a $app`
+if [ ! $? -eq 0 ]
+then
+    echo $check
+    exit 1
+fi
+
+download_folder=$3
+is_public=$4
+directory=/var/www/$app
+config=$directory/config/config.php
+
+# Save app settings
+sudo yunohost app setting $app download_folder -v "$download_folder"
+sudo yunohost app setting $app is_public -v "$is_public"
+
+# Dependencies
+sudo apt-get install -y libav-tools youtube-dl sed
+
+# Get sources
+sudo git clone https://github.com/p1rox/Youtube-dl-WebUI $directory
+sudo mkdir $download_folder
+sudo chown www-data:www-data -R $directory $download_folder
+
+# Remove security (aka password) from Youtube-dl-WebUI, YunoHost'SSO will do the job
+sudo sed -i -e 's;"security" => true;"security" => false;' $config
+# Set download folder
+sudo sed -i -e 's;"outputFolder" => "downloads";"outputFolder" => "$download_folder";'
+
+# Modify Nginx configuration file and copy it to Nginx conf directory
+sed -i "s@YNH_WWW_PATH@$path@g" ../conf/nginx.conf
+sed -i "s@YNH_WWW_ALIAS@$directory/@g" ../conf/nginx.conf
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+
+# If app is public, add url to SSOWat conf as skipped_uris
+if [ "$is_public" = "Yes" ];
+then
+  # unprotected_uris allows SSO credentials to be passed anyway.
+  sudo yunohost app setting $app unprotected_uris -v "/"
+fi
+
+# Reload Nginx and regenerate SSOwat conf
+sudo /etc/init.d/nginx reload
+sudo yunohost app ssowatconf
+
+echo Installation OK, $app should be available here https://$domain$path/
+exit 0

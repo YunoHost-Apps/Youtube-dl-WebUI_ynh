@@ -1,0 +1,48 @@
+{
+    "name": "Youtube-dl-WebUI",
+    "id": "youtube-dl-webui",
+    "description": {
+        "en": "Web interface for youtube-dl",
+        "fr": "Interface web pour youtube-dl"
+    },
+    "license": "GPL-3",
+    "maintainer": {
+        "name": "rgarrigue",
+        "email": "remy.garrigue@gmail.com",
+        "url": "http://garrigue.re"
+    },
+    "multi_instance": "false",
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "ask": {
+                    "en": "Choose a domain for Youtube-dl-WebUI"
+                },
+                "example": "domain.org"
+            },
+            {
+                "name": "path",
+                "ask": {
+                    "en": "Choose a path for Youtube-dl-WebUI"
+                },
+                "example": "/youtube-dl",
+                "default": "/youtube-dl"
+            },
+            {
+                "name": "download_folder",
+                "ask": {
+                    "en": "Choose a folder where video and music will be downloaded"
+                }
+            },
+            {
+                "name": "is_public",
+                "ask": {
+                    "en": "Is it a public application ?"
+                },
+                "choices": ["Yes", "No"],
+                "default": "Yes"
+            }
+        ]
+    }
+}
