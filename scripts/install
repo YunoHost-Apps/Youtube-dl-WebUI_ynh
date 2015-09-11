@@ -27,7 +27,7 @@ sudo apt-get install -y libav-tools youtube-dl sed
 
 # Get sources
 sudo git clone https://github.com/p1rox/Youtube-dl-WebUI $directory
-sudo rmdir $directory/downloads
+sudo rm -rf $directory/downloads
 sudo mkdir $download_folder
 # Just a link for download_folder, otherwise WebUI can't list files
 sudo ln -sf $download_folder $directory/downloads 
