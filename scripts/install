@@ -27,13 +27,14 @@ sudo apt-get install -y libav-tools youtube-dl sed
 
 # Get sources
 sudo git clone https://github.com/p1rox/Youtube-dl-WebUI $directory
+sudo rmdir $directory/downloads
 sudo mkdir $download_folder
-sudo chown www-data:www-data -R $directory $download_folder
+# Just a link for download_folder, otherwise WebUI can't list files
+sudo ln -sf $download_folder $directory/downloads 
+sudo chown www-data:www-data -hR $directory $download_folder
 
 # Remove security (aka password) from Youtube-dl-WebUI, YunoHost'SSO will do the job
 sudo sed -i -e 's;"security" => true;"security" => false;' $config
-# Set download folder
-sudo sed -i -e "s;downloads;$download_folder;" $config
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@YNH_WWW_PATH@$path@g" ../conf/nginx.conf
