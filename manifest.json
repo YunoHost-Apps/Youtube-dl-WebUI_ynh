@@ -33,7 +33,8 @@
                 "name": "download_folder",
                 "ask": {
                     "en": "Choose a folder where video and music will be downloaded"
-                }
+                },
+                "example": "/srv/downloads"
             },
             {
                 "name": "is_public",
@@ -41,7 +42,7 @@
                     "en": "Is it a public application ?"
                 },
                 "choices": ["Yes", "No"],
-                "default": "Yes"
+                "default": "No"
             }
         ]
     }
