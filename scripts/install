@@ -49,7 +49,7 @@ then
 fi
 
 # Reload Nginx and regenerate SSOwat conf
-sudo /etc/init.d/nginx reload
+sudo service nginx reload
 sudo yunohost app ssowatconf
 
 echo Installation OK, $app should be available here https://$domain$path/
